@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WARP-AGENT // 60-FPS Autonomous Agent Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="studio-container" id="studioRoot">
+    <!-- Top Cyberpunk Bar -->
+    <header class="top-nav">
+      <div class="brand-cluster">
+        <div class="brand-logo">⚡</div>
+        <div>
+          <h1 class="brand-title">WARP-AGENT <span class="badge-system1">JEV SYSTEM 1 REFLEX</span></h1>
+          <p class="brand-subtitle">World's First 60-FPS Autonomous Coding Agent // Speedrun Visualizer Studio</p>
+        </div>
+      </div>
+
+      <div class="studio-controls">
+        <div class="scenario-picker">
+          <label for="taskSelect">MISSION:</label>
+          <select id="taskSelect">
+            <option value="Fix Concurrency Mutex Starvation across 20 Microservices">Fix Mutex Starvation across 20 Microservices</option>
+            <option value="Zero-Day Remote Code Execution AST Neutralization">Zero-Day RCE AST Neutralization</option>
+            <option value="Full-Stack SQL Injection Blast Radius Auto-Patch">Full-Stack SQL Injection Auto-Patch</option>
+          </select>
+        </div>
+
+        <button id="sfxToggle" class="btn-tool active" title="Toggle Procedural Audio FX">
+          <span id="sfxIcon">🔊</span> SFX: ON
+        </button>
+
+        <button id="fullscreenBtn" class="btn-tool" title="Maximize for Screen Recording">
+          ⛶ STUDIO MODE
+        </button>
+      </div>
+    </header>
+
+    <!-- Speedrun Control Hero -->
+    <section class="speedrun-hero">
+      <div class="telemetry-bar">
+        <div class="stat-card">
+          <span class="stat-label">STOPWATCH</span>
+          <span class="stat-value text-cyan" id="heroStopwatch">00:00.000</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">WARP VELOCITY</span>
+          <span class="stat-value text-emerald" id="heroVelocity">0.0 <small>actions/s</small></span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">AVG LATENCY</span>
+          <span class="stat-value text-yellow" id="heroLatency">0ms</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">AGENT SPEEDUP</span>
+          <span class="stat-value text-purple" id="heroSpeedup">100x</span>
+        </div>
+      </div>
+
+      <div class="cta-actions">
+        <button id="startRaceBtn" class="btn-warp">
+          <span class="pulse-spark"></span>
+          ⚡ START 60-FPS SPEEDRUN
+        </button>
+        <button id="resetRaceBtn" class="btn-reset">
+          ↺ RESET ARENA
+        </button>
+      </div>
+    </section>
+
+    <!-- The Side-by-Side Arena -->
+    <main class="arena-grid">
+      <!-- LEFT: Legacy Sluggish LLM Agent -->
+      <section class="arena-panel legacy-panel">
+        <div class="panel-header">
+          <div class="header-tag tag-legacy">
+            <span class="dot-red"></span> LEGACY 70B LLM AGENT (Devin / Claude 3.5 / GPT-4o)
+          </div>
+          <div class="panel-metrics">
+            <span id="legacyTimer" class="metric-timer">00:00.0</span>
+            <span id="legacyCost" class="metric-cost">$0.00</span>
+          </div>
+        </div>
+
+        <div class="progress-track">
+          <div id="legacyProgressBar" class="progress-bar-fill fill-red" style="width: 0%;"></div>
+        </div>
+
+        <div class="agent-status-box">
+          <div id="legacySpinner" class="spinner-idle">⏳</div>
+          <div class="status-meta">
+            <div id="legacyStatusText" class="status-heading">Awaiting Mission Launch...</div>
+            <div id="legacySubText" class="status-sub">Heavy 70B parameter inference: ~4,200ms per tool decision</div>
+          </div>
+        </div>
+
+        <div class="stream-console" id="legacyConsole">
+          <div class="log-entry log-dim">[00:00.000] Initializing LangChain / AutoGen agent loop...</div>
+        </div>
+      </section>
+
+      <!-- RIGHT: WARP-AGENT Powered by Jev System 1 -->
+      <section class="arena-panel warp-panel">
+        <div class="panel-header">
+          <div class="header-tag tag-warp">
+            <span class="dot-emerald"></span> WARP-AGENT (Jev System 1 Reflex Engine)
+          </div>
+          <div class="panel-metrics">
+            <span id="warpTimer" class="metric-timer text-emerald">00:00.000</span>
+            <span id="warpCost" class="metric-cost text-cyan">$0.0000</span>
+          </div>
+        </div>
+
+        <div class="progress-track">
+          <div id="warpProgressBar" class="progress-bar-fill fill-emerald" style="width: 0%;"></div>
+        </div>
+
+        <div class="agent-status-box warp-active-box">
+          <div class="gauge-ring">
+            <span id="warpStepCount" class="gauge-number">0/48</span>
+          </div>
+          <div class="status-meta">
+            <div id="warpStatusText" class="status-heading text-emerald">System 1 Reflex Subconscious Ready</div>
+            <div id="warpSubText" class="status-sub">Target Latency: &lt;30ms // Zero LLM Hallucinations</div>
+          </div>
+        </div>
+
+        <div class="stream-console warp-stream" id="warpConsole">
+          <div class="log-entry log-dim">[00:00.000] Subconscious neural reflex ready for instant execution...</div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Victory Overlay Modal -->
+    <div class="victory-banner" id="victoryBanner">
+      <div class="victory-content">
+        <div class="victory-badge">⚡ MISSION SPEEDRUN COMPLETED IN 1.34s</div>
+        <div class="victory-stats">
+          <div class="stat-pill"><span class="label">WARP TIME:</span> <strong>1.34s (48 Actions)</strong></div>
+          <div class="stat-pill"><span class="label">LEGACY ESTIMATE:</span> <strong class="text-red">182.4s (3+ min)</strong></div>
+          <div class="stat-pill"><span class="label">COST REDUCTION:</span> <strong class="text-emerald">99.4% SAVED ($0.0003 vs $1.44)</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FLOATING WEBCAM BUBBLE FOR RECORDING -->
+    <div class="camera-dock dock-bottom-right" id="cameraDock">
+      <div class="camera-canvas-wrapper">
+        <!-- Audio Reactive Waveform Ring Canvas -->
+        <canvas id="audioVisualizerRing" width="220" height="220"></canvas>
+        
+        <!-- Live Video Feed -->
+        <video id="webcamVideo" autoplay playsinline muted></video>
+
+        <!-- Placeholder when Camera is off -->
+        <div id="cameraPlaceholder" class="camera-placeholder">
+          <div class="cam-avatar">🎙️</div>
+          <div class="cam-hint">Click to Enable Camera</div>
+        </div>
+
+        <!-- Camera HUD Ring Controls -->
+        <div class="camera-controls-overlay">
+          <button id="camToggleBtn" class="cam-btn" title="Toggle Webcam">📹</button>
+          <button id="micToggleBtn" class="cam-btn active" title="Toggle Mic Visualizer">🎙️</button>
+          <button id="dockCycleBtn" class="cam-btn" title="Cycle Dock Corner">🔄</button>
+        </div>
+      </div>
+      <div class="presenter-tag">
+        <span class="live-dot"></span> PRESENTER
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="camera.js"></script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

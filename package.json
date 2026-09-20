@@ -1,0 +1,40 @@
+{
+  "name": "warp-agent",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "⚡ The world's first 60-FPS autonomous coding agent. Executes 50 tool iterations in 1.4s powered by Jev System 1.",
+  "main": "src/speedrun-engine.js",
+  "bin": {
+    "warp-agent": "bin/warp-agent.js"
+  },
+  "scripts": {
+    "start": "node bin/warp-agent.js",
+    "studio": "node bin/warp-agent.js --ui",
+    "test": "node bin/warp-agent.js --test"
+  },
+  "keywords": [
+    "ai",
+    "agent",
+    "jev",
+    "system1",
+    "speedrun",
+    "subconscious-reflex",
+    "autonomous-agent",
+    "devtools",
+    "60fps",
+    "performance"
+  ],
+  "author": "Kartik Modi",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kartik-modi/warp-agent.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kartik-modi/warp-agent/issues"
+  },
+  "homepage": "https://github.com/kartik-modi/warp-agent#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
