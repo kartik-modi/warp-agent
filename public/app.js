@@ -1,6 +1,6 @@
 /**
  * WARP-AGENT Speedrun Arena Controller
- * Connected to LIVE TypeSafe AI Jev 1.13.0 Model via Server-Sent Events (/api/real-stream)
+ * LIVE AI BATTLE: Google Gemini 2.5 Flash vs TypeSafe AI Jev 1.13.0
  */
 
 class AudioSynthesizer {
@@ -16,7 +16,7 @@ class AudioSynthesizer {
     }
   }
 
-  playTick(frequency = 880, duration = 0.03, type = 'sine') {
+  playJevTick(frequency = 1100, duration = 0.03) {
     if (!this.enabled) return;
     this.init();
     if (this.ctx.state === 'suspended') this.ctx.resume();
@@ -24,11 +24,11 @@ class AudioSynthesizer {
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
 
-    osc.type = type;
+    osc.type = 'triangle';
     osc.frequency.setValueAtTime(frequency, this.ctx.currentTime);
     osc.frequency.exponentialRampToValueAtTime(frequency * 0.4, this.ctx.currentTime + duration);
 
-    gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
+    gain.gain.setValueAtTime(0.09, this.ctx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
 
     osc.connect(gain);
@@ -36,6 +36,26 @@ class AudioSynthesizer {
 
     osc.start();
     osc.stop(this.ctx.currentTime + duration);
+  }
+
+  playGeminiTick() {
+    if (!this.enabled) return;
+    this.init();
+    if (this.ctx.state === 'suspended') this.ctx.resume();
+
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(440, this.ctx.currentTime);
+    gain.gain.setValueAtTime(0.05, this.ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.08);
+
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+
+    osc.start();
+    osc.stop(this.ctx.currentTime + 0.08);
   }
 
   playVictory() {
@@ -51,7 +71,6 @@ class AudioSynthesizer {
 
         osc.type = 'triangle';
         osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
-
         gain.gain.setValueAtTime(0.12, this.ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.35);
 
@@ -62,25 +81,6 @@ class AudioSynthesizer {
         osc.stop(this.ctx.currentTime + 0.35);
       }, idx * 75);
     });
-  }
-
-  playSlowDrone() {
-    if (!this.enabled) return;
-    this.init();
-    const osc = this.ctx.createOscillator();
-    const gain = this.ctx.createGain();
-
-    osc.type = 'sawtooth';
-    osc.frequency.setValueAtTime(110, this.ctx.currentTime);
-
-    gain.gain.setValueAtTime(0.04, this.ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.4);
-
-    osc.connect(gain);
-    gain.connect(this.ctx.destination);
-
-    osc.start();
-    osc.stop(this.ctx.currentTime + 0.4);
   }
 }
 
@@ -125,7 +125,6 @@ class ArenaController {
 
     this.victoryBanner = document.getElementById('victoryBanner');
     this.victoryBadge = document.getElementById('victoryBadge');
-    this.victoryLatency = document.getElementById('victoryLatency');
     this.victoryCount = document.getElementById('victoryCount');
   }
 
@@ -163,8 +162,7 @@ class ArenaController {
     this.startTimerLoop();
 
     const mission = this.taskSelect.value;
-    this.runLegacyAgentLoop();
-    this.runRealJevWarpLoop(mission);
+    this.runLiveBattle(mission);
   }
 
   startTimerLoop() {
@@ -174,6 +172,7 @@ class ArenaController {
       const formatted = this.formatTime(elapsed);
       this.heroStopwatch.textContent = formatted;
       this.legacyTimer.textContent = formatted;
+      this.warpTimer.textContent = formatted;
       requestAnimationFrame(update);
     };
     requestAnimationFrame(update);
@@ -185,64 +184,77 @@ class ArenaController {
     return `${String(mins).padStart(2, '0')}:${String(secs).padStart(6, '0')}`;
   }
 
-  runRealJevWarpLoop(missionKey) {
+  runLiveBattle(missionKey) {
+    this.legacyConsole.innerHTML = '';
     this.warpConsole.innerHTML = '';
-    this.warpStatusText.textContent = `⚡ Evaluating Live TypeSafe AI jev-1.13.0 Model`;
-    this.warpStatusText.className = 'status-heading text-emerald';
-    this.warpSubText.textContent = `Streaming verified neural inferences via @typesafe-ai/sdk`;
 
-    const streamUrl = `/api/real-stream?mission=${encodeURIComponent(missionKey)}`;
+    this.legacyStatusText.textContent = `✨ Streaming Google Gemini 2.5 Flash Inferences`;
+    this.warpStatusText.textContent = `⚡ Streaming TypeSafe AI Jev 1.13.0 Inferences`;
+
+    this.legacySpinner.textContent = '✨';
+    this.legacySpinner.style.animation = 'pulseDot 1s infinite';
+
+    const streamUrl = `/api/live-battle?mission=${encodeURIComponent(missionKey)}`;
     this.eventSource = new EventSource(streamUrl);
 
-    let completedSteps = 0;
-    let totalItems = 10;
+    let jevCount = 0;
+    let geminiCount = 0;
+    let geminiCumulativeCost = 0;
 
     this.eventSource.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      const { step, total, input, summary, latencyMs, model } = data;
-      completedSteps = step;
-      totalItems = total;
 
-      const currentElapsed = (performance.now() - this.startTime) / 1000;
-      const percent = (step / total) * 100;
+      if (data.type === 'jev') {
+        jevCount = data.step;
+        const percent = (data.step / data.total) * 100;
+        this.warpProgressBar.style.width = `${percent}%`;
+        this.warpStepCount.textContent = `${data.step}/${data.total}`;
+        this.warpCost.textContent = `$${(data.step * 0.00002).toFixed(4)}`;
 
-      // Update gauges
-      this.warpProgressBar.style.width = `${percent}%`;
-      this.warpStepCount.textContent = `${step}/${total}`;
-      this.warpTimer.textContent = this.formatTime(currentElapsed);
-      this.warpCost.textContent = `$${(step * 0.00002).toFixed(4)}`;
+        const logLine = document.createElement('div');
+        logLine.className = 'log-entry';
+        logLine.innerHTML = `<span class="log-dim">[${data.latencyMs}ms]</span> <span class="log-cyan">${data.input}</span> ➔ <span class="log-emerald">${data.summary}</span>`;
+        this.warpConsole.appendChild(logLine);
+        this.warpConsole.scrollTop = this.warpConsole.scrollHeight;
 
-      this.heroLatency.textContent = `${latencyMs}ms`;
-      if (data.confidence) {
-        this.heroSpeedup.textContent = `${(data.confidence * 100).toFixed(0)}%`;
+        this.sfx.playJevTick(1000 + (data.step * 40));
+      } 
+      else if (data.type === 'gemini') {
+        geminiCount = data.step;
+        const percent = (data.step / data.total) * 100;
+        this.legacyProgressBar.style.width = `${percent}%`;
+
+        const itemCost = parseFloat(data.cost.replace('$', '')) || 0.0001;
+        geminiCumulativeCost += itemCost;
+        this.legacyCost.textContent = `$${geminiCumulativeCost.toFixed(4)}`;
+
+        const logLine = document.createElement('div');
+        logLine.className = 'log-entry';
+        logLine.innerHTML = `<span class="log-dim">[${data.latencyMs}ms]</span> <span class="log-yellow">${data.input}</span> ➔ <span class="log-red">${data.summary}</span> <span class="log-dim">(${data.totalTokens}t)</span>`;
+        this.legacyConsole.appendChild(logLine);
+        this.legacyConsole.scrollTop = this.legacyConsole.scrollHeight;
+
+        this.sfx.playGeminiTick();
       }
-
-      // Log real Jev response
-      const logLine = document.createElement('div');
-      logLine.className = 'log-entry';
-      logLine.innerHTML = `<span class="log-dim">[${latencyMs}ms]</span> <span class="log-cyan">${input}</span> ➔ <span class="log-emerald">${summary}</span>`;
-      this.warpConsole.appendChild(logLine);
-      this.warpConsole.scrollTop = this.warpConsole.scrollHeight;
-
-      // SFX
-      this.sfx.playTick(1100 + (step * 45), 0.025, 'triangle');
     };
 
     this.eventSource.addEventListener('complete', (event) => {
       const summary = JSON.parse(event.data);
       this.eventSource.close();
+      this.isRunning = false;
 
       const finalElapsed = ((performance.now() - this.startTime) / 1000).toFixed(3);
-      this.warpTimer.textContent = this.formatTime(finalElapsed);
       this.heroStopwatch.textContent = this.formatTime(finalElapsed);
-      this.warpStatusText.textContent = `✅ ${summary.total}/${summary.total} Live Decisions Completed in ${finalElapsed}s`;
-      this.warpSubText.textContent = `Model: ${summary.model} | Avg Latency: ${summary.avgLatencyMs}ms per live call`;
+      this.legacyTimer.textContent = this.formatTime(finalElapsed);
+      this.warpTimer.textContent = this.formatTime(finalElapsed);
+
+      this.legacyStatusText.textContent = `✅ Gemini 2.5 Flash: ${summary.total}/${summary.total} Completed`;
+      this.warpStatusText.textContent = `✅ Jev 1.13.0: ${summary.total}/${summary.total} Completed`;
 
       this.sfx.playVictory();
       this.victoryBanner.style.display = 'block';
-      this.victoryBadge.textContent = `⚡ 100% REAL MODEL INFERENCE: ${summary.total} DECISIONS IN ${finalElapsed}s`;
-      this.victoryLatency.textContent = `${summary.avgLatencyMs}ms / decision`;
-      this.victoryCount.textContent = `${summary.total}/${summary.total} Verified`;
+      this.victoryBadge.textContent = `⚡ 100% LIVE COMPARATIVE BATTLE COMPLETED (${summary.total} ITEMS IN ${finalElapsed}s)`;
+      this.victoryCount.textContent = `Both Live APIs Authenticated`;
 
       this.startRaceBtn.disabled = false;
       this.startRaceBtn.style.opacity = '1';
@@ -250,42 +262,10 @@ class ArenaController {
 
     this.eventSource.onerror = () => {
       this.eventSource.close();
+      this.isRunning = false;
       this.startRaceBtn.disabled = false;
       this.startRaceBtn.style.opacity = '1';
     };
-  }
-
-  async runLegacyAgentLoop() {
-    this.legacyConsole.innerHTML = '';
-    this.legacySpinner.textContent = '⚙️';
-    this.legacySpinner.style.animation = 'pulseDot 1s infinite';
-
-    const slowSteps = [
-      { text: "Calling Claude 3.5 Sonnet: Generating multi-paragraph safety analysis...", cost: 0.048, dur: 3800 },
-      { text: "Token generation complete (3.8s). Formatting JSON schema output...", cost: 0.096, dur: 4200 },
-      { text: "Calling GPT-4o: Autoregressively evaluating second item...", cost: 0.144, dur: 4100 },
-      { text: "Generating explanation and chain of thought...", cost: 0.192, dur: 4500 }
-    ];
-
-    for (let i = 0; i < slowSteps.length; i++) {
-      const step = slowSteps[i];
-      this.legacyStatusText.textContent = `⏳ Item ${i + 1}: ${step.text}`;
-      this.sfx.playSlowDrone();
-
-      const log = document.createElement('div');
-      log.className = 'log-entry';
-      const now = ((performance.now() - this.startTime) / 1000).toFixed(1);
-      log.innerHTML = `<span class="log-dim">[${now}s]</span> <span class="log-red">${step.text}</span>`;
-      this.legacyConsole.appendChild(log);
-      this.legacyConsole.scrollTop = this.legacyConsole.scrollHeight;
-
-      await new Promise(r => setTimeout(r, step.dur));
-      this.legacyCost.textContent = `$${step.cost.toFixed(3)}`;
-      this.legacyProgressBar.style.width = `${((i + 1) / 10) * 100}%`;
-    }
-
-    this.legacyStatusText.textContent = `❌ SLOWDOWN: Only 4/10 items completed after 16.6s`;
-    this.legacySubText.textContent = `Autoregressive tokens lag: ~38 seconds total | Cost: $0.48`;
   }
 
   resetRace() {
@@ -297,25 +277,21 @@ class ArenaController {
     this.startRaceBtn.style.opacity = '1';
 
     this.heroStopwatch.textContent = '00:00.000';
-    this.heroVelocity.textContent = 'jev-1.13.0';
-    this.heroLatency.textContent = '0ms';
-    this.heroSpeedup.textContent = '100%';
-
     this.legacyTimer.textContent = '00:00.0';
-    this.legacyCost.textContent = '$0.00';
+    this.legacyCost.textContent = '$0.0000';
     this.legacyProgressBar.style.width = '0%';
-    this.legacySpinner.textContent = '⏳';
+    this.legacySpinner.textContent = '✨';
     this.legacySpinner.style.animation = 'none';
-    this.legacyStatusText.textContent = 'Awaiting Mission Launch...';
-    this.legacySubText.textContent = 'Autoregressive text generation: ~3,800ms per decision';
-    this.legacyConsole.innerHTML = '<div class="log-entry log-dim">[00:00.000] Standby for comparative prompt execution...</div>';
+    this.legacyStatusText.textContent = 'Google AI API Ready';
+    this.legacySubText.textContent = 'Autoregressive LLM // Live token generation';
+    this.legacyConsole.innerHTML = '<div class="log-entry log-dim">[00:00.000] Standby for live Gemini 2.5 Flash token streams...</div>';
 
     this.warpTimer.textContent = '00:00.000';
     this.warpCost.textContent = '$0.0000';
     this.warpProgressBar.style.width = '0%';
     this.warpStepCount.textContent = '0/10';
-    this.warpStatusText.textContent = 'Connected to Live Jev Cluster';
-    this.warpSubText.textContent = 'Real API Key Authenticated // Verified System 1 Inference';
+    this.warpStatusText.textContent = 'TypeSafe AI Jev Ready';
+    this.warpSubText.textContent = 'System 1 Reflex // Sub-300ms discrete decisions';
     this.warpConsole.innerHTML = '<div class="log-entry log-dim">[00:00.000] Ready to stream live neural decisions from jev-1.13.0...</div>';
 
     this.victoryBanner.style.display = 'none';

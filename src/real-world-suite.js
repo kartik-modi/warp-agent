@@ -2,9 +2,10 @@
  * Real-World Test Suite for Jev System 1 (jev-1.13.0)
  * Evaluates genuine developer & trading states using official @typesafe-ai/sdk
  */
+import './env.js';
 import { TypeSafeClient, choice, score, noul } from '@typesafe-ai/sdk';
 
-const API_KEY = process.env.TYPESAFE_API_KEY || 'apikey_2140f6d6f58953514e498984a03e85b4380b_dca1e1e5a5c7fab4bf184be6ce47cc2b26f81f2aac483f2dad0a3e1bb96eadd8';
+const API_KEY = process.env.TYPESAFE_API_KEY;
 const client = new TypeSafeClient({ apiKey: API_KEY });
 
 export const REAL_WORLD_MISSIONS = {

@@ -1,12 +1,13 @@
 /**
  * Zero-dependency local server for WARP-AGENT Visualizer Studio
- * Powered by live TypeSafe AI Jev System 1 model (jev-1.13.0)
+ * Features live side-by-side battle: TypeSafe AI jev-1.13.0 vs Google Gemini 2.5 Flash
  */
 import http from 'http';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { REAL_WORLD_MISSIONS } from './src/real-world-suite.js';
+import { evaluateWithGemini } from './src/gemini-client.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -25,8 +26,8 @@ const MIME_TYPES = {
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
 
-  // SSE Real-World Live Stream Endpoint
-  if (url.pathname === '/api/real-stream') {
+  // SSE Live Battle Endpoint (Jev 1.13.0 vs Gemini 2.5 Flash)
+  if (url.pathname === '/api/live-battle') {
     res.writeHead(200, {
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache',
@@ -38,57 +39,63 @@ const server = http.createServer(async (req, res) => {
     const mission = REAL_WORLD_MISSIONS[missionKey] || REAL_WORLD_MISSIONS.terminal_security;
     const total = mission.items.length;
     const sessionStart = Date.now();
-    let totalLatency = 0;
 
+    // Evaluate each item side-by-side
     for (let i = 0; i < total; i++) {
       const item = mission.items[i];
-      const itemStart = Date.now();
-      try {
-        const evalResult = await mission.evaluate(item);
-        const latency = Date.now() - itemStart;
-        totalLatency += latency;
 
-        const payload = {
-          step: i + 1,
-          total,
-          input: item.input,
-          desc: item.desc,
-          summary: evalResult.summary,
-          choice: evalResult.choice,
-          confidence: evalResult.confidence,
-          model: evalResult.model || 'jev-1.13.0',
-          latencyMs: latency,
-          sessionElapsedMs: Date.now() - sessionStart
-        };
-
-        res.write(`data: ${JSON.stringify(payload)}\n\n`);
-      } catch (err) {
+      // Fire both calls simultaneously
+      const jevPromise = (async () => {
+        const t0 = Date.now();
+        const evalRes = await mission.evaluate(item);
+        const latency = Date.now() - t0;
         res.write(`data: ${JSON.stringify({
+          type: 'jev',
           step: i + 1,
           total,
           input: item.input,
-          summary: `API Error: ${err.message}`,
-          latencyMs: Date.now() - itemStart,
-          error: true
+          summary: evalRes.summary,
+          choice: evalRes.choice,
+          confidence: evalRes.confidence,
+          latencyMs: latency,
+          model: 'jev-1.13.0',
+          elapsedMs: Date.now() - sessionStart
         })}\n\n`);
-      }
+      })();
+
+      const geminiPromise = (async () => {
+        const geminiRes = await evaluateWithGemini(item, missionKey);
+        res.write(`data: ${JSON.stringify({
+          type: 'gemini',
+          step: i + 1,
+          total,
+          input: item.input,
+          summary: geminiRes.summary,
+          latencyMs: geminiRes.latencyMs,
+          totalTokens: geminiRes.totalTokens,
+          cost: geminiRes.cost,
+          model: 'gemini-2.5-flash',
+          elapsedMs: Date.now() - sessionStart
+        })}\n\n`);
+      })();
+
+      // Wait for both to complete before moving to next item
+      await Promise.all([jevPromise, geminiPromise]);
     }
 
-    const avgLatency = (totalLatency / total).toFixed(0);
-    const totalElapsed = ((Date.now() - sessionStart) / 1000).toFixed(2);
     res.write(`event: complete\ndata: ${JSON.stringify({
       mission: mission.title,
       total,
-      totalElapsedSec: totalElapsed,
-      avgLatencyMs: avgLatency,
-      model: 'jev-1.13.0'
+      totalElapsedSec: ((Date.now() - sessionStart) / 1000).toFixed(2),
+      jevModel: 'jev-1.13.0',
+      geminiModel: 'gemini-2.5-flash'
     })}\n\n`);
 
     res.end();
     return;
   }
 
-  // Static File Serving with Cache-Control: no-cache for instant live updates
+  // Static File Serving with Cache-Control: no-cache
   let filePath = path.join(PUBLIC_DIR, url.pathname === '/' ? 'index.html' : url.pathname);
   if (!filePath.startsWith(PUBLIC_DIR)) {
     res.writeHead(403);
@@ -115,6 +122,7 @@ const server = http.createServer(async (req, res) => {
 server.listen(PORT, () => {
   const studioUrl = `http://localhost:${PORT}`;
   console.log(`\n⚡ WARP-AGENT Visualizer Studio live at: \x1b[36m${studioUrl}\x1b[0m`);
-  console.log(`🧠 Connected to LIVE TypeSafe AI model: \x1b[32mjev-1.13.0\x1b[0m`);
-  console.log(`🧪 Real-world test suite ready at: /api/real-stream`);
+  console.log(`🧠 Left Panel: \x1b[33mGoogle Gemini 2.5 Flash (LIVE)\x1b[0m`);
+  console.log(`⚡ Right Panel: \x1b[32mTypeSafe AI jev-1.13.0 (LIVE)\x1b[0m`);
+  console.log(`⚔️ Live Battle Endpoint: /api/live-battle`);
 });

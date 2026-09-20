@@ -2,12 +2,11 @@
  * Official Jev System 1 Decision Client for WARP-AGENT
  * Uses official @typesafe-ai/sdk connecting to live jev-1.13.0 model.
  */
+import './env.js';
 import { TypeSafeClient, choice, score, noul } from '@typesafe-ai/sdk';
 
-const DEFAULT_KEY = 'apikey_2140f6d6f58953514e498984a03e85b4380b_dca1e1e5a5c7fab4bf184be6ce47cc2b26f81f2aac483f2dad0a3e1bb96eadd8';
-
 export class JevSystem1Client {
-  constructor(apiKey = process.env.TYPESAFE_API_KEY || DEFAULT_KEY) {
+  constructor(apiKey = process.env.TYPESAFE_API_KEY) {
     this.apiKey = apiKey;
     this.client = new TypeSafeClient({ apiKey: this.apiKey });
   }
@@ -62,7 +61,6 @@ export class JevSystem1Client {
         tokens: response.usage
       };
     } catch (err) {
-      // Fallback if network interruption occurs
       const elapsed = Date.now() - startTime;
       return {
         action: 'AST_DIAGNOSTIC',

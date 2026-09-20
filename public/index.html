@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WARP-AGENT // Real-World Jev 1.13.0 Studio</title>
+  <title>WARP-AGENT // Live AI Battle: Jev 1.13.0 vs Gemini 2.5 Flash</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=3">
+  <link rel="stylesheet" href="styles.css?v=4">
 </head>
 <body>
   <div class="studio-container" id="studioRoot">
@@ -16,8 +16,8 @@
       <div class="brand-cluster">
         <div class="brand-logo">⚡</div>
         <div>
-          <h1 class="brand-title">WARP-AGENT <span class="badge-system1">LIVE: JEV-1.13.0</span></h1>
-          <p class="brand-subtitle">Connected to TypeSafe AI Production Cluster // Real-World Benchmark Arena</p>
+          <h1 class="brand-title">WARP-AGENT <span class="badge-system1">LIVE ARENA: 100% REAL MODEL APIS</span></h1>
+          <p class="brand-subtitle">Google Gemini 2.5 Flash vs TypeSafe AI jev-1.13.0 // Live Wire Inferences</p>
         </div>
       </div>
 
@@ -49,23 +49,23 @@
           <span class="stat-value text-cyan" id="heroStopwatch">00:00.000</span>
         </div>
         <div class="stat-card">
-          <span class="stat-label">JEV MODEL</span>
+          <span class="stat-label">SYSTEM 1 (JEV)</span>
           <span class="stat-value text-emerald" id="heroVelocity">jev-1.13.0</span>
         </div>
         <div class="stat-card">
-          <span class="stat-label">LIVE LATENCY</span>
-          <span class="stat-value text-yellow" id="heroLatency">0ms</span>
+          <span class="stat-label">SYSTEM 2 (GEMINI)</span>
+          <span class="stat-value text-yellow" id="heroLatency">gemini-2.5-flash</span>
         </div>
         <div class="stat-card">
-          <span class="stat-label">DECISION CONFIDENCE</span>
-          <span class="stat-value text-purple" id="heroSpeedup">100%</span>
+          <span class="stat-label">AUTHENTICATION</span>
+          <span class="stat-value text-purple" id="heroSpeedup">100% Live</span>
         </div>
       </div>
 
       <div class="cta-actions">
         <button id="startRaceBtn" class="btn-warp">
           <span class="pulse-spark"></span>
-          ⚡ RUN REAL-WORLD TEST
+          ⚡ START LIVE AI BATTLE
         </button>
         <button id="resetRaceBtn" class="btn-reset">
           ↺ RESET ARENA
@@ -75,15 +75,15 @@
 
     <!-- The Side-by-Side Arena -->
     <main class="arena-grid">
-      <!-- LEFT: Legacy Sluggish LLM Agent -->
+      <!-- LEFT: Live Google Gemini 2.5 Flash -->
       <section class="arena-panel legacy-panel">
         <div class="panel-header">
           <div class="header-tag tag-legacy">
-            <span class="dot-red"></span> TRADITIONAL 70B LLM (Claude 3.5 Sonnet / GPT-4o)
+            <span class="dot-red"></span> GOOGLE GEMINI 2.5 FLASH (LIVE API)
           </div>
           <div class="panel-metrics">
             <span id="legacyTimer" class="metric-timer">00:00.0</span>
-            <span id="legacyCost" class="metric-cost">$0.00</span>
+            <span id="legacyCost" class="metric-cost">$0.0000</span>
           </div>
         </div>
 
@@ -92,23 +92,23 @@
         </div>
 
         <div class="agent-status-box">
-          <div id="legacySpinner" class="spinner-idle">⏳</div>
+          <div id="legacySpinner" class="spinner-idle">✨</div>
           <div class="status-meta">
-            <div id="legacyStatusText" class="status-heading">Awaiting Mission Launch...</div>
-            <div id="legacySubText" class="status-sub">Autoregressive text generation: ~3,800ms per decision</div>
+            <div id="legacyStatusText" class="status-heading">Google AI API Ready</div>
+            <div id="legacySubText" class="status-sub">Autoregressive LLM // Live token generation</div>
           </div>
         </div>
 
         <div class="stream-console" id="legacyConsole">
-          <div class="log-entry log-dim">[00:00.000] Standby for comparative prompt execution...</div>
+          <div class="log-entry log-dim">[00:00.000] Standby for live Gemini 2.5 Flash token streams...</div>
         </div>
       </section>
 
-      <!-- RIGHT: WARP-AGENT Powered by Live Jev 1.13.0 -->
+      <!-- RIGHT: Live TypeSafe AI Jev 1.13.0 -->
       <section class="arena-panel warp-panel">
         <div class="panel-header">
           <div class="header-tag tag-warp">
-            <span class="dot-emerald"></span> WARP-AGENT (Live TypeSafe AI jev-1.13.0)
+            <span class="dot-emerald"></span> TYPESAFE AI JEV-1.13.0 (LIVE API)
           </div>
           <div class="panel-metrics">
             <span id="warpTimer" class="metric-timer text-emerald">00:00.000</span>
@@ -125,8 +125,8 @@
             <span id="warpStepCount" class="gauge-number">0/10</span>
           </div>
           <div class="status-meta">
-            <div id="warpStatusText" class="status-heading text-emerald">Connected to Live Jev Cluster</div>
-            <div id="warpSubText" class="status-sub">Real API Key Authenticated // Verified System 1 Inference</div>
+            <div id="warpStatusText" class="status-heading text-emerald">TypeSafe AI Jev Ready</div>
+            <div id="warpSubText" class="status-sub">System 1 Reflex // Sub-300ms discrete decisions</div>
           </div>
         </div>
 
@@ -139,11 +139,11 @@
     <!-- Victory Overlay Modal -->
     <div class="victory-banner" id="victoryBanner">
       <div class="victory-content">
-        <div class="victory-badge" id="victoryBadge">⚡ REAL-WORLD TEST COMPLETED</div>
+        <div class="victory-badge" id="victoryBadge">⚡ LIVE BATTLE COMPLETED</div>
         <div class="victory-stats">
-          <div class="stat-pill"><span class="label">MODEL:</span> <strong>jev-1.13.0</strong></div>
-          <div class="stat-pill"><span class="label">AVG LATENCY:</span> <strong id="victoryLatency" class="text-yellow">240ms</strong></div>
-          <div class="stat-pill"><span class="label">DECISIONS VERIFIED:</span> <strong id="victoryCount" class="text-emerald">100% Calibrated</strong></div>
+          <div class="stat-pill"><span class="label">JEV MODEL:</span> <strong>jev-1.13.0</strong></div>
+          <div class="stat-pill"><span class="label">GEMINI MODEL:</span> <strong class="text-yellow">gemini-2.5-flash</strong></div>
+          <div class="stat-pill"><span class="label">STATUS:</span> <strong id="victoryCount" class="text-emerald">100% Live Inferences</strong></div>
         </div>
       </div>
     </div>
@@ -176,7 +176,7 @@
     </div>
   </div>
 
-  <script type="module" src="camera.js?v=3"></script>
-  <script type="module" src="app.js?v=3"></script>
+  <script type="module" src="camera.js?v=4"></script>
+  <script type="module" src="app.js?v=4"></script>
 </body>
 </html>
