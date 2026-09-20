@@ -36,5 +36,8 @@
   "homepage": "https://github.com/kartik-modi/warp-agent#readme",
   "engines": {
     "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@typesafe-ai/sdk": "^0.6.0"
   }
 }

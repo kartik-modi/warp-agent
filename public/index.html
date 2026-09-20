@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WARP-AGENT // 60-FPS Autonomous Agent Studio</title>
+  <title>WARP-AGENT // Real-World Jev 1.13.0 Studio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=3">
 </head>
 <body>
   <div class="studio-container" id="studioRoot">
@@ -16,18 +16,18 @@
       <div class="brand-cluster">
         <div class="brand-logo">⚡</div>
         <div>
-          <h1 class="brand-title">WARP-AGENT <span class="badge-system1">JEV SYSTEM 1 REFLEX</span></h1>
-          <p class="brand-subtitle">World's First 60-FPS Autonomous Coding Agent // Speedrun Visualizer Studio</p>
+          <h1 class="brand-title">WARP-AGENT <span class="badge-system1">LIVE: JEV-1.13.0</span></h1>
+          <p class="brand-subtitle">Connected to TypeSafe AI Production Cluster // Real-World Benchmark Arena</p>
         </div>
       </div>
 
       <div class="studio-controls">
         <div class="scenario-picker">
-          <label for="taskSelect">MISSION:</label>
+          <label for="taskSelect">REAL MISSION:</label>
           <select id="taskSelect">
-            <option value="Fix Concurrency Mutex Starvation across 20 Microservices">Fix Mutex Starvation across 20 Microservices</option>
-            <option value="Zero-Day Remote Code Execution AST Neutralization">Zero-Day RCE AST Neutralization</option>
-            <option value="Full-Stack SQL Injection Blast Radius Auto-Patch">Full-Stack SQL Injection Auto-Patch</option>
+            <option value="terminal_security">🛡️ Terminal Security Gating (Bash Commands)</option>
+            <option value="sports_arbitrage">⚽ In-Play Sports Arbitrage (Betfair Volatility)</option>
+            <option value="compiler_healer">🩺 TypeScript Compiler Diagnostics Auto-Heal</option>
           </select>
         </div>
 
@@ -45,27 +45,27 @@
     <section class="speedrun-hero">
       <div class="telemetry-bar">
         <div class="stat-card">
-          <span class="stat-label">STOPWATCH</span>
+          <span class="stat-label">SESSION TIMER</span>
           <span class="stat-value text-cyan" id="heroStopwatch">00:00.000</span>
         </div>
         <div class="stat-card">
-          <span class="stat-label">WARP VELOCITY</span>
-          <span class="stat-value text-emerald" id="heroVelocity">0.0 <small>actions/s</small></span>
+          <span class="stat-label">JEV MODEL</span>
+          <span class="stat-value text-emerald" id="heroVelocity">jev-1.13.0</span>
         </div>
         <div class="stat-card">
-          <span class="stat-label">AVG LATENCY</span>
+          <span class="stat-label">LIVE LATENCY</span>
           <span class="stat-value text-yellow" id="heroLatency">0ms</span>
         </div>
         <div class="stat-card">
-          <span class="stat-label">AGENT SPEEDUP</span>
-          <span class="stat-value text-purple" id="heroSpeedup">100x</span>
+          <span class="stat-label">DECISION CONFIDENCE</span>
+          <span class="stat-value text-purple" id="heroSpeedup">100%</span>
         </div>
       </div>
 
       <div class="cta-actions">
         <button id="startRaceBtn" class="btn-warp">
           <span class="pulse-spark"></span>
-          ⚡ START 60-FPS SPEEDRUN
+          ⚡ RUN REAL-WORLD TEST
         </button>
         <button id="resetRaceBtn" class="btn-reset">
           ↺ RESET ARENA
@@ -79,7 +79,7 @@
       <section class="arena-panel legacy-panel">
         <div class="panel-header">
           <div class="header-tag tag-legacy">
-            <span class="dot-red"></span> LEGACY 70B LLM AGENT (Devin / Claude 3.5 / GPT-4o)
+            <span class="dot-red"></span> TRADITIONAL 70B LLM (Claude 3.5 Sonnet / GPT-4o)
           </div>
           <div class="panel-metrics">
             <span id="legacyTimer" class="metric-timer">00:00.0</span>
@@ -95,20 +95,20 @@
           <div id="legacySpinner" class="spinner-idle">⏳</div>
           <div class="status-meta">
             <div id="legacyStatusText" class="status-heading">Awaiting Mission Launch...</div>
-            <div id="legacySubText" class="status-sub">Heavy 70B parameter inference: ~4,200ms per tool decision</div>
+            <div id="legacySubText" class="status-sub">Autoregressive text generation: ~3,800ms per decision</div>
           </div>
         </div>
 
         <div class="stream-console" id="legacyConsole">
-          <div class="log-entry log-dim">[00:00.000] Initializing LangChain / AutoGen agent loop...</div>
+          <div class="log-entry log-dim">[00:00.000] Standby for comparative prompt execution...</div>
         </div>
       </section>
 
-      <!-- RIGHT: WARP-AGENT Powered by Jev System 1 -->
+      <!-- RIGHT: WARP-AGENT Powered by Live Jev 1.13.0 -->
       <section class="arena-panel warp-panel">
         <div class="panel-header">
           <div class="header-tag tag-warp">
-            <span class="dot-emerald"></span> WARP-AGENT (Jev System 1 Reflex Engine)
+            <span class="dot-emerald"></span> WARP-AGENT (Live TypeSafe AI jev-1.13.0)
           </div>
           <div class="panel-metrics">
             <span id="warpTimer" class="metric-timer text-emerald">00:00.000</span>
@@ -122,16 +122,16 @@
 
         <div class="agent-status-box warp-active-box">
           <div class="gauge-ring">
-            <span id="warpStepCount" class="gauge-number">0/48</span>
+            <span id="warpStepCount" class="gauge-number">0/10</span>
           </div>
           <div class="status-meta">
-            <div id="warpStatusText" class="status-heading text-emerald">System 1 Reflex Subconscious Ready</div>
-            <div id="warpSubText" class="status-sub">Target Latency: &lt;30ms // Zero LLM Hallucinations</div>
+            <div id="warpStatusText" class="status-heading text-emerald">Connected to Live Jev Cluster</div>
+            <div id="warpSubText" class="status-sub">Real API Key Authenticated // Verified System 1 Inference</div>
           </div>
         </div>
 
         <div class="stream-console warp-stream" id="warpConsole">
-          <div class="log-entry log-dim">[00:00.000] Subconscious neural reflex ready for instant execution...</div>
+          <div class="log-entry log-dim">[00:00.000] Ready to stream live neural decisions from jev-1.13.0...</div>
         </div>
       </section>
     </main>
@@ -139,11 +139,11 @@
     <!-- Victory Overlay Modal -->
     <div class="victory-banner" id="victoryBanner">
       <div class="victory-content">
-        <div class="victory-badge">⚡ MISSION SPEEDRUN COMPLETED IN 1.34s</div>
+        <div class="victory-badge" id="victoryBadge">⚡ REAL-WORLD TEST COMPLETED</div>
         <div class="victory-stats">
-          <div class="stat-pill"><span class="label">WARP TIME:</span> <strong>1.34s (48 Actions)</strong></div>
-          <div class="stat-pill"><span class="label">LEGACY ESTIMATE:</span> <strong class="text-red">182.4s (3+ min)</strong></div>
-          <div class="stat-pill"><span class="label">COST REDUCTION:</span> <strong class="text-emerald">99.4% SAVED ($0.0003 vs $1.44)</strong></div>
+          <div class="stat-pill"><span class="label">MODEL:</span> <strong>jev-1.13.0</strong></div>
+          <div class="stat-pill"><span class="label">AVG LATENCY:</span> <strong id="victoryLatency" class="text-yellow">240ms</strong></div>
+          <div class="stat-pill"><span class="label">DECISIONS VERIFIED:</span> <strong id="victoryCount" class="text-emerald">100% Calibrated</strong></div>
         </div>
       </div>
     </div>
@@ -176,7 +176,7 @@
     </div>
   </div>
 
-  <script type="module" src="camera.js"></script>
-  <script type="module" src="app.js"></script>
+  <script type="module" src="camera.js?v=3"></script>
+  <script type="module" src="app.js?v=3"></script>
 </body>
 </html>
